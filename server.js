@@ -1,13 +1,14 @@
-import express, { json } from 'express';
-import bodyParser from 'body-parser'; // latest version of exressJS now comes with Body-Parser!
-import bcrypt from 'bcrypt-nodejs';
-import cors from 'cors';
-import knex from 'knex';
+const express = require('express');
+const bodyParse = require('body-parser');
+const bcrypt = require ('bcrypt-nodejs');
+const cors = ('cors');
+const knex = ('knex');
 
-import { handleRegister } from './controllers/register';
-import { handleSignin } from './controllers/signin';
-import { handleProfileGet } from './controllers/profile';
-import { handleImage, handleApiCall } from './controllers/image';
+const register = require('./controllers/register');
+//import { handleRegister } from './controllers/register';
+const signin = require('./controllers/signin');
+const profile = require('./controllers/profile');
+const image = require('./controllers/image');
 
 const db = knex({
   // connect to your own database here:
@@ -24,15 +25,15 @@ const app = express();
 
 
 app.use(cors())
-app.use(json()); // latest version of exressJS now comes with Body-Parser!
+app.use(express.json()); // latest version of exressJS now comes with Body-Parser!
 
-app.get('/', (req, res)=> { res.send('it is working' })
+app.get('/', (req, res)=> { res.send('it is working') })
 app.post('/signin', handleSignin(db, bcrypt))
-app.post('/register', (req, res) => { handleRegister(req, res, db, bcrypt) })
-app.get('/profile/:id', (req, res) => { handleProfileGet(req, res, db)})
-app.put('/image', (req, res) => { handleImage(req, res, db)})
-app.post('/imageurl', (req, res) => { handleApiCall(req, res)})
+app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
+app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db)})
+app.put('/image', (req, res) => { image.handleImage(req, res, db)})
+app.post('/imageurl', (req, res) => { image.handleApiCall(req, res)})
 
-app.listen(process.env.PORT || 3000, ()=> {
+app.listen(process.env.PORT || 3000, () => {
   console.log('app is running on port ${process.env.PORT}');
 })
